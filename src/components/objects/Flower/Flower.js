@@ -22,14 +22,17 @@ class Flower extends Group {
         this.name = 'flower';
         loader.load(MODEL, (gltf) => {
             this.add(gltf.scene);
+            this.translateY(2.9);
+            this.rotateY(Math.PI);
+            this.scale.multiplyScalar(0.3); 
         });
 
         // Add self to parent's update list
         parent.addToUpdateList(this);
 
         // Populate GUI
-        this.state.gui.add(this.state, 'bob');
-        this.state.gui.add(this.state, 'spin');
+        // this.state.gui.add(this.state, 'bob');
+        // this.state.gui.add(this.state, 'spin');
     }
 
     spin() {
@@ -56,14 +59,14 @@ class Flower extends Group {
     update(timeStamp) {
         if (this.state.bob) {
             // Bob back and forth
-            this.rotation.z = 0.05 * Math.sin(timeStamp / 300);
+            // this.rotation.z = 0.05 * Math.sin(timeStamp / 300);
         }
         if (this.state.twirl > 0) {
             // Lazy implementation of twirl
             this.state.twirl -= Math.PI / 8;
             this.rotation.y += Math.PI / 8;
         }
-
+        this.rotateY(-0.02);
         // Advance tween animations, if any exist
         TWEEN.update();
     }

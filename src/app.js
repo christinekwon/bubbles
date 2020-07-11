@@ -9,6 +9,8 @@
 import { WebGLRenderer, PerspectiveCamera, Vector3 } from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { SeedScene } from 'scenes';
+// import { Keyboard } from './keyboard.js';
+
 
 // Initialize core ThreeJS components
 const scene = new SeedScene();
@@ -16,7 +18,7 @@ const camera = new PerspectiveCamera();
 const renderer = new WebGLRenderer({ antialias: true });
 
 // Set up camera
-camera.position.set(6, 3, -10);
+camera.position.set(0, -5, -10);
 camera.lookAt(new Vector3(0, 0, 0));
 
 // Set up renderer, canvas, and minor CSS adjustments
@@ -51,5 +53,61 @@ const windowResizeHandler = () => {
     camera.aspect = innerWidth / innerHeight;
     camera.updateProjectionMatrix();
 };
+
+// require("./ndict.js")
+var T = require("./timbre.js");
+
+require("./keyboard.js");
+require("./ndict.js");
+require("./midicps.js");
+var synth = T("OscGen", {wave:"sin", mul:0.05}).play();
+
+var keydict = T("ndict.key");
+var midicps = T("midicps");
+// console.log(event.keyCode);
+// console.log(keydict.at(event.keyCode));
+// console.log(midicps.at(keydict.at(event.keyCode)));
+
+T("keyboard").on("keydown", function(e) {
+    var midi = keydict.at(e.keyCode);
+    if (midi) {
+      var freq = midicps.at(midi);
+      synth.noteOnWithFreq(freq, 100);
+    }
+  }).on("keyup", function(e) {
+    var midi = keydict.at(e.keyCode);
+    if (midi) {
+      synth.noteOff(midi, 100);
+    }
+  }).start();
 windowResizeHandler();
 window.addEventListener('resize', windowResizeHandler, false);
+window.addEventListener("keydown", handleKeyDown);
+window.addEventListener("keyup", handleKeyUp);
+function handleKeyDown(event) {
+    // if (event.key != undefined)
+      scene.key = event.key;
+    // if (scene.key == 'a') {
+    //     var sine1 = T("sin", {freq:440, mul:0.5});
+    //     var sine2 = T("sin", {freq:660, mul:0.5});
+
+    //     T("perc", {r:500}, sine1, sine2).on("ended", function() {
+    //     this.pause();
+    //     }).bang().play();
+    // } 
+
+
+
+    //   console.log(HI);r
+    // else {
+    //   if (!event.metaKey && !event.altKey && !event.controlKey)
+    //   scene.key = event.key;
+    // }
+  }
+  
+  // once key is lifted, set SeedScene key to default value
+  function handleKeyUp(event) {
+    scene.key = undefined
+  }
+
+  
