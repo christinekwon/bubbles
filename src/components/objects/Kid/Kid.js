@@ -26,6 +26,9 @@ class Kid extends Group {
       twirl: 0,
   };
   
+  this.x = x;
+  this.y = y;
+  this.z = z;
 
     this.name = "kid";
     
@@ -33,7 +36,7 @@ class Kid extends Group {
     var kidMaterial = new THREE.MeshPhongMaterial({
       color: hexColor,
       envMap: parent.background,
-      refractionRatio: 0.9,
+      refractionRatio: 0.6,
       specular: 0xffffff,
       shininess: 1000
     });
@@ -76,22 +79,46 @@ class Kid extends Group {
     // Load material and object
     const objloader = new OBJLoader();
     const mtlLoader = new MTLLoader();
+    var pivot;
     objloader.setMaterials(mtlLoader.parse(MATERIAL)).load(MODEL, obj => {
-      obj.translateX(x);
-      obj.translateY(-1);
-      obj.translateZ(z);
+      // obj.translateX(x);
+      // obj.translateY(y);
+      // obj.translateZ(z);
+
+      obj.position.set(0, -1, 0);
+      obj.rotation.set(0, Math.PI, 0);
       obj.scale.multiplyScalar(scale);
-      obj.rotateX(-Math.PI / 6);
-      obj.rotateY(Math.PI);
+      // obj.rotateX(-Math.PI / 6);
+      // obj.rotateY(Math.PI);
       obj.children[0].material = kidMaterial;
+
+      pivot = new THREE.Group();
+      pivot.position.set( x, y, z );
 
       obj.matrixAutoUpdate = false;
       obj.updateMatrix();
-
+      
       this.add(obj);
-    });
+      this.add(pivot);
+      
+      pivot.add(obj);
 
+      // visualiz pivot
+      // var pivotSphereGeo = new THREE.SphereGeometry( 0.1 );
+      // var pivotSphere = new THREE.Mesh(pivotSphereGeo);
+      // pivotSphere.position.set(pivot.position.x, pivot.position.y, pivot.position.z );
+      // parent.add( pivotSphere );
+      
+      // parent.add( new THREE.AxesHelper() );
+
+      this.pivot = pivot;
+      this.obj = obj;
+      parent.add(pivot);
+
+    });
+    
     parent.addToUpdateList(this);
+    
 
     // Populate GUI
     // this.state.gui.add(this.state, 'bob');
@@ -106,11 +133,11 @@ class Kid extends Group {
     // TweenJS guide: http://learningthreejs.com/blog/2011/08/17/tweenjs-for-smooth-animation/
     // Possible easings: http://sole.github.io/tween.js/examples/03_graphs.html
 
-    const jumpUp = new TWEEN.Tween(this.position)
-        .to({ y: this.position.y + 2 }, 1000)
+    const jumpUp = new TWEEN.Tween(this.pivot.position)
+        .to({ y: this.pivot.position.y + 2 }, 1000)
         .easing(TWEEN.Easing.Quadratic.Out);
-    const fallDown = new TWEEN.Tween(this.position)
-        .to({ y: 0 }, 1000)
+    const fallDown = new TWEEN.Tween(this.pivot.position)
+        .to({ y: this.y }, 1000)
         .easing(TWEEN.Easing.Quadratic.In);
 
     // Fall down after jumping up
@@ -129,7 +156,8 @@ class Kid extends Group {
       // Lazy implementation of twirl
       //80
       this.state.twirl -= Math.PI / 80;
-      this.rotation.x += Math.PI / 80;
+      this.pivot.rotation.x += Math.PI / 80;
+      // console.log(this.pivot);
   }
     // this.rotateY(-0.02);
     TWEEN.update();

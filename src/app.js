@@ -9,17 +9,20 @@
 import { WebGLRenderer, PerspectiveCamera, Vector3 } from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { SeedScene } from 'scenes';
+import MAPPING from "./mapping.png";
+
 // import { Keyboard } from './keyboard.js';
 
 
 // Initialize core ThreeJS components
 const scene = new SeedScene();
-const camera = new PerspectiveCamera();
+const camera = new PerspectiveCamera(60, 20, 1, 50);
 const renderer = new WebGLRenderer({ antialias: true });
 
 // Set up camera
-camera.position.set(0, -5, -10);
+camera.position.set(0, 5, -30);
 camera.lookAt(new Vector3(0, 0, 0));
+// console.log(camera.position);
 
 // Set up renderer, canvas, and minor CSS adjustments
 renderer.setPixelRatio(window.devicePixelRatio);
@@ -54,21 +57,27 @@ const windowResizeHandler = () => {
     camera.updateProjectionMatrix();
 };
 
-// require("./ndict.js")
-var T = require("./timbre.js");
+document.getElementById("start").addEventListener("click", start);
+document.getElementById("info").addEventListener("mouseover", showInfo);
+document.getElementById("info").addEventListener("mouseout", hideInfo);
 
-require("./keyboard.js");
-require("./ndict.js");
-require("./midicps.js");
-var synth = T("OscGen", {wave:"sin", mul:0.05}).play();
+function start() {
+  console.log("HERE");
+  var T = require("./timbre.js");
+  require("./keyboard.js");
+  require("./ndict.js");
+  require("./midicps.js");
+  var synth, keydict, midicps;
+  // synth = T("OscGen", {wave:"sin", mul:0.05}).play();
+  var table = [0.8, [0, 1500]];
 
-var keydict = T("ndict.key");
-var midicps = T("midicps");
-// console.log(event.keyCode);
-// console.log(keydict.at(event.keyCode));
-// console.log(midicps.at(keydict.at(event.keyCode)));
+  // var osc = T("pulse");
+  var env = T("perc", {r:1000});
+  synth = T("OscGen", {wave:"sin", env:env, mul:0.1}).play();
+  keydict = T("ndict.key");
+  midicps = T("midicps");
 
-T("keyboard").on("keydown", function(e) {
+  T("keyboard").on("keydown", function(e) {
     var midi = keydict.at(e.keyCode);
     if (midi) {
       var freq = midicps.at(midi);
@@ -80,6 +89,19 @@ T("keyboard").on("keydown", function(e) {
       synth.noteOff(midi, 100);
     }
   }).start();
+}
+
+document.getElementById("mapping").src = MAPPING;
+
+function showInfo() {
+  document.getElementById("mapping").style.visibility = "visible";
+}
+
+function hideInfo() {
+  document.getElementById("mapping").style.visibility = "hidden";
+}
+
+
 windowResizeHandler();
 window.addEventListener('resize', windowResizeHandler, false);
 window.addEventListener("keydown", handleKeyDown);
@@ -96,18 +118,18 @@ function handleKeyDown(event) {
     //     }).bang().play();
     // } 
 
-
-
-    //   console.log(HI);r
-    // else {
-    //   if (!event.metaKey && !event.altKey && !event.controlKey)
-    //   scene.key = event.key;
-    // }
   }
   
   // once key is lifted, set SeedScene key to default value
   function handleKeyUp(event) {
-    scene.key = undefined
+    scene.key = undefined;
   }
 
-  
+
+  // async function start() {
+  //   await new Promise(r => setTimeout(r, 1200));
+  //   synth = T("OscGen", {wave:"sin", mul:0.05}).play();
+
+  //     keydict = T("ndict.key");
+  //     midicps = T("midicps");
+  // }
