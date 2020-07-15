@@ -127,7 +127,7 @@ class Kid extends Group {
 
   spin() {
     // Add a simple twirl
-    this.state.twirl += 2 + Math.PI;
+    this.state.twirl += 200 + Math.PI;
 
     // Use timing library for more precice "bounce" animation
     // TweenJS guide: http://learningthreejs.com/blog/2011/08/17/tweenjs-for-smooth-animation/
@@ -156,7 +156,7 @@ class Kid extends Group {
       // Lazy implementation of twirl
       //80
       this.state.twirl -= Math.PI / 80;
-      this.pivot.rotation.x += Math.PI / 80;
+      this.pivot.rotation.x += Math.PI / 40;
       // console.log(this.pivot);
   }
     // this.rotateY(-0.02);

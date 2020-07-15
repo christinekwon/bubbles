@@ -15,14 +15,17 @@ import MAPPING from "./mapping.png";
 
 
 // Initialize core ThreeJS components
-const scene = new SeedScene();
-const camera = new PerspectiveCamera(60, 20, 1, 50);
+
+const camera = new PerspectiveCamera(70, 20, 1, 50);
+// const camera = new PerspectiveCamera();
 const renderer = new WebGLRenderer({ antialias: true });
 
 // Set up camera
-camera.position.set(0, 5, -30);
+camera.position.set(0, 0, -50);
 camera.lookAt(new Vector3(0, 0, 0));
 // console.log(camera.position);
+
+const scene = new SeedScene(camera);
 
 // Set up renderer, canvas, and minor CSS adjustments
 renderer.setPixelRatio(window.devicePixelRatio);
@@ -72,8 +75,8 @@ function start() {
   var table = [0.8, [0, 1500]];
 
   // var osc = T("pulse");
-  var env = T("perc", {r:1000});
-  synth = T("OscGen", {wave:"sin", env:env, mul:0.1}).play();
+  var env = T("perc", {r:700});
+  synth = T("OscGen", {wave:"sin", env:env, mul:0.2}).play();
   keydict = T("ndict.key");
   midicps = T("midicps");
 

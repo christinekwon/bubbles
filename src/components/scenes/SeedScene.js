@@ -22,9 +22,12 @@ const VIOLET = 0x9966ff;
 const GREY = 0xffffff;
 
 class SeedScene extends Scene {
-    constructor() {
+    constructor(camera) {
         // Call parent Scene() constructo
         super();
+        this.period = 30; // rotation time in seconds
+        this.clock = new THREE.Clock();
+        this.matrix = new THREE.Matrix4(); 
 
         this.start = true;
         // Init state
@@ -35,7 +38,10 @@ class SeedScene extends Scene {
             updateFloating: [],
             key: "",
             kidList: {},
+            increaseX: true,
         };
+
+        this.camera = camera;
 
         // Set background to a nice color
         // this.background = new Color(0xffffff);
@@ -98,8 +104,8 @@ class SeedScene extends Scene {
         // }
         // this.add(pinkKid, redKid, orangeKid, yellowKid, greenKid, blueKid, indigoKid, violetKid);
 
-        const y1 = 0;
-        const y2 = 3;
+        const y1 = -1.5;
+        const y2 = 1.5;
         const z1 = 0;
         const z2 = 1;
 
@@ -216,6 +222,13 @@ class SeedScene extends Scene {
             this.nextTime = timeStamp;
             this.start=false;
         }
+
+        this.matrix.makeRotationY(this.clock.getDelta() * 2 * Math.PI / this.period);
+        this.camera.position.applyMatrix4(this.matrix);
+        // this.camera.position.y = 20;
+
+
+        // this.camera.updateProjectionMatrix();
     }
 }
 
