@@ -223,8 +223,8 @@ class SeedScene extends Scene {
             this.start=false;
         }
 
-        this.matrix.makeRotationY(this.clock.getDelta() * 2 * Math.PI / this.period);
-        this.camera.position.applyMatrix4(this.matrix);
+        // this.matrix.makeRotationY(this.clock.getDelta() *0.5 * Math.PI / this.period);
+        // this.camera.position.applyMatrix4(this.matrix);
         // this.camera.position.y = 20;
 
 
