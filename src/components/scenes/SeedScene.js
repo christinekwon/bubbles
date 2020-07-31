@@ -26,6 +26,8 @@ class SeedScene extends Scene {
         // Call parent Scene() constructo
         super();
         this.period = 30; // rotation time in seconds
+        this.counter = 300;
+        this.direction = 1;
         this.clock = new THREE.Clock();
         this.matrix = new THREE.Matrix4(); 
 
@@ -223,8 +225,20 @@ class SeedScene extends Scene {
             this.start=false;
         }
 
-        // this.matrix.makeRotationY(this.clock.getDelta() *0.5 * Math.PI / this.period);
-        // this.camera.position.applyMatrix4(this.matrix);
+
+        if (this.direction == 1) {
+            this.matrix.makeRotationY(this.clock.getDelta() * 0.5 * Math.PI / this.period);
+        }
+        else {
+            this.matrix.makeRotationY(this.clock.getDelta() * -0.5 * Math.PI / this.period);
+        }
+        // console.log(this.counter);
+        if (this.counter == 600) {
+            this.direction *= -1;
+            this.counter = 0;
+        }
+        this.counter++;
+        this.camera.position.applyMatrix4(this.matrix);
         // this.camera.position.y = 20;
 
 

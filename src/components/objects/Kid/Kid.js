@@ -156,7 +156,7 @@ class Kid extends Group {
       // Lazy implementation of twirl
       //80
       this.state.twirl -= Math.PI / 80;
-      this.pivot.rotation.x += Math.PI / 40;
+      this.pivot.rotation.x += Math.PI / 80;
       // console.log(this.pivot);
   }
     // this.rotateY(-0.02);
