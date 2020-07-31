@@ -36,7 +36,7 @@ class Kid extends Group {
     var kidMaterial = new THREE.MeshPhongMaterial({
       color: hexColor,
       envMap: parent.background,
-      refractionRatio: 0.6,
+      refractionRatio: 0.5,
       specular: 0xffffff,
       shininess: 1000
     });
