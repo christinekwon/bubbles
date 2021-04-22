@@ -40,6 +40,7 @@ class Kid extends Group {
       specular: 0xffffff,
       shininess: 1000
     });
+    
     kidMaterial.envMap.mapping = THREE.CubeRefractionMapping;
     
     // if (!transparent) {
